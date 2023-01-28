@@ -1,8 +1,13 @@
 name: PR Build
+# on:
+#   pull_request:
+#     branches:
+#       - main
 on:
-  pull_request:
+  push:
     branches:
       - main
+      - 'release-*'
 
 jobs:
   build:
