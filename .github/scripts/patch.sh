@@ -24,7 +24,7 @@ else
 echo "Skiping patching opentelemetry-java"
 fi
 
-if [[ -f .github/patchs/opentelemetry-java-instrumentation.patch]]; then
+if [[ -f .github/patchs/opentelemetry-java-instrumentation.patch ]]; then
 git clone https://github.com/open-telemetry/opentelemetry-java-instrumentation.git
 
 cd opentelemetry-java-instrumentation
