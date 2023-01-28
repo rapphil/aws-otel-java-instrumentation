@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - */release-
+      - 'release-*'
 
 env:
   AWS_DEFAULT_REGION: us-east-1
