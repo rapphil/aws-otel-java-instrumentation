@@ -12,6 +12,8 @@ cd tmp
 ls /.github/patchs
 ls
 ls /.github
+pwd
+ls
 OTEL_JAVA_PATCH="/${DIR}/../patchs/opentelemetry-java.patch"
 
 if [[ -f "$OTEL_JAVA_PATCH" ]]; then
