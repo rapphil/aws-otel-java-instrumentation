@@ -14,13 +14,13 @@ ls
 ls /.github
 pwd
 ls
-OTEL_JAVA_PATCH="/${DIR}/../patchs/opentelemetry-java.patch"
+OTEL_JAVA_PATCH="../.github/patchs/opentelemetry-java.patch"
 
 if [[ -f "$OTEL_JAVA_PATCH" ]]; then
 git clone https://github.com/open-telemetry/opentelemetry-java.git
 cd opentelemetry-java
 git checkout v${OTEL_JAVA_VERSION} -b tag-v${OTEL_JAVA_VERSION}
-patch -p1 < ${OTEL_JAVA_PATCH}
+patch -p1 < ../${OTEL_JAVA_PATCH}
 
 git commit -a -m "Patched version ${PATCH_VERSION}"
 
@@ -31,13 +31,14 @@ else
 echo "Skiping patching opentelemetry-java"
 fi
 
-if [[ -f "/${DIR}/../patchs/opentelemetry-java-instrumentation.patch" ]]; then
+OTEL_JAVA_INSTRUMENTATION_PATCH="../.github/patchs/opentelemetry-java-instrumentation.patch"
+if [[ -f "$OTEL_JAVA_PATCH" ]]; then
 git clone https://github.com/open-telemetry/opentelemetry-java-instrumentation.git
 
 cd opentelemetry-java-instrumentation
 git checkout v${OTEL_JAVA_INSTRUMENTATION_VERSION} -b tag-v${OTEL_JAVA_INSTRUMENTATION_VERSION}
 
-patch -p1 < "/${DIR}/../patchs/opentelemetry-java-instrumentation.patch"
+patch -p1 < "../${OTEL_JAVA_INSTRUMENTATION_PATCH}"
 
 git commit -a -m "Patched version ${PATCH_VERSION}"
 
