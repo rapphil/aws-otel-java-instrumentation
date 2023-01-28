@@ -27,7 +27,7 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - name: Try to patch if necessary
         if: ${{ contains(github.ref, 'refs/heads/release-') }}
-        run: ./scripts/patch.sh
+        run: .github/scripts/patch.sh
       - name: Build with Gradle with Integration tests
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: gradle/gradle-build-action@v2
