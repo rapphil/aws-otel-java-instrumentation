@@ -9,7 +9,9 @@ DIR=$( dirname "$SOURCE" )
 PATCH_VERSION=1.21.1-adot
 mkdir tmp
 cd tmp
-
+ls /.github/patchs
+ls
+ls /.github
 OTEL_JAVA_PATCH="/${DIR}/../patchs/opentelemetry-java.patch"
 
 if [[ -f "$OTEL_JAVA_PATCH" ]]; then
