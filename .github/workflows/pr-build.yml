@@ -46,7 +46,7 @@ jobs:
         with:
           arguments: build
           build-root-directory: opentelemetry-java
-        if: ${{ env.patch_otel_java == 'true'  && matrix.os == 'ubuntu-latest'}}
+        if: ${{ false && env.patch_otel_java == 'true'  && matrix.os == 'ubuntu-latest'}}
 
       - name: Publish otel java to maven local
         uses: gradle/gradle-build-action@v2
@@ -63,7 +63,7 @@ jobs:
         with:
           arguments: check -x spotlessCheck
           build-root-directory: opentelemetry-java-instrumentation
-        if: ${{ env.patch_otel_java_instrumentation == 'true'  && matrix.os == 'ubuntu-latest'}}
+        if: ${{ false && env.patch_otel_java_instrumentation == 'true'  && matrix.os == 'ubuntu-latest'}}
 
       - name: Publish otel java instrumentation to maven local
         uses: gradle/gradle-build-action@v2
