@@ -23,10 +23,44 @@ jobs:
         with:
           java-version: 17
       - uses: gradle/wrapper-validation-action@v1
+      - name: check patches
+        run: |
+          if [[ -f .github/patchs/opentelemetry-java.patch ]]; then
+            echo 'patch_otel_java=true' >> $GITHUB_ENV
+          fi
+          if [[ -f .github/patchs/opentelemetry-java-instrumentation.patch ]]; then
+            echo 'patch_otel_java_instrumentation=true' >> $GITHUB_ENV
+          fi
+        shell: bash
       - name: Try to patch if necessary
         if: ${{ contains(github.ref, 'refs/heads/release-') }}
         run: .github/scripts/patch.sh
         shell: bash
+      - name: Build otel_java
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+          build-root-directory: opentelemetry-java
+      - name: Publish otel java to maven local 
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publishToMavenLocal
+          build-root-directory: opentelemetry-java
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+        if: ${{ env.patch_otel_java == "true" }}
+      - name: Build otel_otel_instrumentation
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check -x spotlessCheck
+          build-root-directory: opentelemetry-java-instrumentation
+      - name: Publish otel java instrumentation to maven local
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publishToMavenLocal
+          build-root-directory: opentelemetry-java
+        if: ${{ env.patch_otel_java == "true" }}
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}

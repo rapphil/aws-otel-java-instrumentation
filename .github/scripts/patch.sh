@@ -6,14 +6,6 @@ OTEL_CONTRIB_VERSION=1.21.0
 
 SOURCE=${BASH_SOURCE[0]}
 DIR=$( dirname "$SOURCE" )
-PATCH_VERSION=1.21.1-adot
-mkdir tmp
-cd tmp
-ls /.github/patchs
-ls
-ls /.github
-pwd
-ls
 OTEL_JAVA_PATCH="../.github/patchs/opentelemetry-java.patch"
 
 if [[ -f "$OTEL_JAVA_PATCH" ]]; then
@@ -22,9 +14,6 @@ cd opentelemetry-java
 git checkout v${OTEL_JAVA_VERSION} -b tag-v${OTEL_JAVA_VERSION}
 patch -p1 < ../${OTEL_JAVA_PATCH}
 
-git commit -a -m "Patched version ${PATCH_VERSION}"
-
-./gradlew publishToMavenLocal
 
 cd -
 else
@@ -32,7 +21,7 @@ echo "Skiping patching opentelemetry-java"
 fi
 
 OTEL_JAVA_INSTRUMENTATION_PATCH="../.github/patchs/opentelemetry-java-instrumentation.patch"
-if [[ -f "$OTEL_JAVA_PATCH" ]]; then
+if [[ -f "$OTEL_JAVA_INSTRUMENTATION_PATCH" ]]; then
 git clone https://github.com/open-telemetry/opentelemetry-java-instrumentation.git
 
 cd opentelemetry-java-instrumentation
@@ -40,10 +29,8 @@ git checkout v${OTEL_JAVA_INSTRUMENTATION_VERSION} -b tag-v${OTEL_JAVA_INSTRUMEN
 
 patch -p1 < "../${OTEL_JAVA_INSTRUMENTATION_PATCH}"
 
-git commit -a -m "Patched version ${PATCH_VERSION}"
 
 # ./gradlew check -x spotlessCheck 
-./gradlew publishToMavenLocal
 else
 echo "Skipping patching opentelemetry-java-instrumentation"
 fi
