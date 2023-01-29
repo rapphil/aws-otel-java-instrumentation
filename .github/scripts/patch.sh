@@ -6,7 +6,7 @@ OTEL_CONTRIB_VERSION=1.21.0
 
 SOURCE=${BASH_SOURCE[0]}
 DIR=$( dirname "$SOURCE" )
-OTEL_JAVA_PATCH="../.github/patchs/opentelemetry-java.patch"
+OTEL_JAVA_PATCH=".github/patchs/opentelemetry-java.patch"
 
 if [[ -f "$OTEL_JAVA_PATCH" ]]; then
 git clone https://github.com/open-telemetry/opentelemetry-java.git
@@ -20,7 +20,7 @@ else
 echo "Skiping patching opentelemetry-java"
 fi
 
-OTEL_JAVA_INSTRUMENTATION_PATCH="../.github/patchs/opentelemetry-java-instrumentation.patch"
+OTEL_JAVA_INSTRUMENTATION_PATCH=".github/patchs/opentelemetry-java-instrumentation.patch"
 if [[ -f "$OTEL_JAVA_INSTRUMENTATION_PATCH" ]]; then
 git clone https://github.com/open-telemetry/opentelemetry-java-instrumentation.git
 
