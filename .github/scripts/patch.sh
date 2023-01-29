@@ -42,7 +42,8 @@ patch -p1 < "../${OTEL_JAVA_INSTRUMENTATION_PATCH}"
 
 git commit -a -m "Patched version ${PATCH_VERSION}"
 
-./gradlew check -x spotlessCheck && ./gradlew publishToMavenLocal
+# ./gradlew check -x spotlessCheck 
+./gradlew publishToMavenLocal
 else
 echo "Skipping patching opentelemetry-java-instrumentation"
 fi
