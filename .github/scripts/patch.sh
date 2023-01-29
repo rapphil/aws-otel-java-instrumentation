@@ -22,6 +22,7 @@ fi
 
 OTEL_JAVA_INSTRUMENTATION_PATCH=".github/patchs/opentelemetry-java-instrumentation.patch"
 if [[ -f "$OTEL_JAVA_INSTRUMENTATION_PATCH" ]]; then
+git config --system core.longpaths true
 git clone https://github.com/open-telemetry/opentelemetry-java-instrumentation.git
 
 cd opentelemetry-java-instrumentation
