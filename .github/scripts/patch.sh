@@ -24,7 +24,7 @@ patch -p1 < ../${OTEL_JAVA_PATCH}
 
 git commit -a -m "Patched version ${PATCH_VERSION}"
 
-./gradlew build && ./gradlew publishToMavenLocal
+./gradlew publishToMavenLocal
 
 cd -
 else
