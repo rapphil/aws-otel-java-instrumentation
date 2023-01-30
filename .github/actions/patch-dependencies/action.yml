@@ -1,0 +1,71 @@
+name: "Patch dependencies"
+description: "Patch dependencie of this project leveraging maven local to publish the results. This workflow will be noop if there is no dependency to patch."
+inputs:
+  run_tests:
+    default: "false"
+    required: false
+    description: "If the workflow should run tests of the dependencies. Anything different than false will evaluate to true"
+  gpg_private_key:
+    description: "The gpg key used to sign the artifacts"
+    required: true
+  gpg_password:
+    description: "The gpg key password"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: check patches
+      run: |
+        if [[ -f .github/patchs/opentelemetry-java.patch ]]; then
+          echo 'patch_otel_java=true' >> $GITHUB_ENV
+        fi
+        if [[ -f .github/patchs/opentelemetry-java-instrumentation.patch ]]; then
+            echo 'patch_otel_java_instrumentation=true' >> $GITHUB_ENV
+        fi
+      shell: bash
+
+    - name: Try to patch if necessary
+      if: ${{ contains(github.ref, 'refs/heads/release-') }}
+      run: .github/scripts/patch.sh
+      shell: bash
+
+    - name: Build otel_java with tests
+      uses: gradle/gradle-build-action@v2
+      with:
+        # Build in case the run_tests input is different than false. This is to avoid typos and covers the worst case.
+        arguments: build publishToMavenLocal
+        build-root-directory: opentelemetry-java
+      env:
+        GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
+        GPG_PASSWORD: ${{ inputs.gpg_password }}
+      if: ${{ env.patch_otel_java == 'true' && inputs.run_tests != 'false' }}
+
+    - name: Build otel_java
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: publishToMavenLocal
+        build-root-directory: opentelemetry-java
+      env:
+        GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
+        GPG_PASSWORD: ${{ inputs.gpg_password }}
+      if: ${{ env.patch_otel_java == 'true' && inputs.run_tests == 'false' }}
+
+    - name: Build otel java instrumentation with tests
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: check -x spotlessCheck publishToMavenLocal
+        build-root-directory: opentelemetry-java-instrumentation
+      env:
+        GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
+        GPG_PASSWORD: ${{ inputs.gpg_password }}
+      if: ${{ env.patch_otel_java_instrumentation == 'true' && inputs.run_tests != 'false' }}
+    - name: Build otel java instrumentation
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: publishToMavenLocal
+        build-root-directory: opentelemetry-java-instrumentation
+      env:
+        GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
+        GPG_PASSWORD: ${{ inputs.gpg_password }}
+      if: ${{ env.patch_otel_java_instrumentation == 'true' && inputs.run_tests != 'false' }}
+  
