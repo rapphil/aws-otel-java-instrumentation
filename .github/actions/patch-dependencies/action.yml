@@ -67,5 +67,5 @@ runs:
       env:
         GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
         GPG_PASSWORD: ${{ inputs.gpg_password }}
-      if: ${{ env.patch_otel_java_instrumentation == 'true' && inputs.run_tests != 'false' }}
-  
+      if: ${{ env.patch_otel_java_instrumentation == 'true' && inputs.run_tests == 'false' }}
+ 
