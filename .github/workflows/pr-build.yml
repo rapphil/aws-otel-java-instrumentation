@@ -25,7 +25,7 @@ jobs:
           java-version: 17
           distribution: temurin
       - uses: gradle/wrapper-validation-action@v1
-      - uses: .github/actions/patch-dependencies
+      - uses: ./.github/actions/patch-dependencies
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_password: ${{ secrets.GPG_PASSWORD }}
